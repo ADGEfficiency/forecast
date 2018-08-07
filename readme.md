@@ -57,5 +57,7 @@ Tools for analyzing model performance
 ### visualization
 
 A toolkit for common plots
-- correlations
+- time series plots
+- correlation in the lags
 - autocorrelations
+- (https://github.com/sebaheg/GEFCom2014-wind)

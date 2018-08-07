@@ -18,17 +18,19 @@ def savefig(plot_func):
 
     def wrapper(*args, **kwargs):
 
+        fig = plot_func(*args, **kwargs)
+
         try:
             fig_name = kwargs.pop('fig_name')
+
+            if fig_name:
+                fig.savefig(fig_name)
+
         except KeyError:
             pass
 
-        fig = plot_func(*args, **kwargs)
+            return fig
 
-        if fig_name:
-            fig.savefig(fig_name)
-
-        return fig
 
     return wrapper
 
@@ -47,25 +49,51 @@ def plot_scatter(
     return f
 
 
+def plot_line(
+        y,
+        x=None,
+        figsize=(10, 10),
+        **kwargs):
+
+    f, a = plt.subplots(figsize=figsize)
+
+    if x is None:
+        x = np.arange(len(y))
+
+    a.plot(x, y, **kwargs)
+
+    return f
+
+
 @savefig
 def plot_time_series(
         data,
         y,
-        figsize=(25, 10),
+        figsize=[25, 10],
+        same_plot=False,
         **kwargs):
 
     if isinstance(y, str):
         y = [y]
 
-    f, a = plt.subplots(figsize=figsize, nrows=len(y), sharex=True)
+    if same_plot:
+        nrows = 1
+
+    else:
+        nrows = len(y)
+
+    figsize[1] = 2 * nrows
+
+    f, a = plt.subplots(figsize=figsize, nrows=nrows, sharex=True)
     a = np.array(a).flatten()
 
     for idx, y_label in enumerate(y):
+        if same_plot:
+            idx = 0
         a[idx].set_title(y_label)
         data.plot(y=y_label, ax=a[idx], **kwargs)
 
     return f
-
 
 @savefig
 def plot_grouped(
