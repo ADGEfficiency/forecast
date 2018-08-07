@@ -1,8 +1,6 @@
 # forecasting energy time series 
 
-This repo is in the initial stages of development.  I'm currently very busy working on timeseries problems in my day job at Tempus Energy, working on a energy focused reinforcement learning library energy_py and teaching a reinforcement learning course!
-
-As I build tools for my work at Tempus I try to port them over to this library. 
+This project is in the initial stages of development.  I'm currently working on time series problems at Tempus Energy - as I build tools for my work at Tempus I try to port them over to this library. 
 
 ## goals for the repo
 
@@ -18,6 +16,26 @@ Scraping
 Processing
 - Elexon
 - wind farm data
+
+```
+Makridakis_2018_statistical_ml_concerns.pdf
+
+Original data: No pre-processing is applied.
+• Transforming the data: The log or the Box-Cox [66] power transformation is applied to the
+original data in order to achieve stationarity in the variance.
+• Deseasonalizing the data: The data is considered seasonal if a significant autocorrelation
+coefficient at lag 12 exists. In such case the data is deseasonalized using the classical, multiplicative
+decomposition approach [39]. The training of the ML weights, or the optimization of
+statistical methods, is subsequently done on the seasonally adjusted data. The forecasts
+obtained are then reseasonalized to determine the final predictions. This is not done in the
+case of ETS and ARIMA methods since they include seasonal models, selected using relative
+tests and information criteria that take care of seasonality and model complexity directly.
+• Detrending the data: A Cox-Stuart test [67] is performed to establish whether a deterministic
+linear trend should be used, or alternatively first differencing, to eliminate the trend
+from the data and achieve stationarity in the mean.
+• Combination of the above three: The benefits of individual preprocessing techniques are
+applied simultaneously to adjust the original data.
+```
 
 ### feature engineering
 
@@ -41,6 +59,3 @@ Tools for analyzing model performance
 A toolkit for common plots
 - correlations
 - autocorrelations
-
-
-
