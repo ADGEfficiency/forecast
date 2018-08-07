@@ -5,6 +5,8 @@ Each report requires a slightly different approach for cleaning
 """
 import pandas as pd
 
+from forecast import check_dataframe
+
 
 def print_duplicates(df):
     dupes = df[df.index.duplicated()]
@@ -39,21 +41,8 @@ def fill_nans(df):
     return df
 
 
-def check_output(df):
-    print('final checkout of output')
-    d = print_duplicates(df)
-    n = print_nans(df)
-
-    if d != 0 or n != 0:
-        raise(ValueError('{} duplicates {} nans'.format(d, n)))
-
-    print(df.describe())
-    print(' ')
-    print(df.head(1))
-
-
 def clean_price_data():
-    price = pd.read_csv('data/B1770.csv', parse_dates=True)
+    price = pd.read_csv('../../../data/raw/elexon/B1770.csv', parse_dates=True)
 
     price = price.pivot_table(values='imbalancePriceAmountGBP',
                               index='time_stamp',
@@ -65,7 +54,7 @@ def clean_price_data():
 
 
 def clean_vol_data():
-    vol = pd.read_csv('data/B1780.csv', index_col=0, parse_dates=True)
+    vol = pd.read_csv('../../../data/raw/elexon/B1780.csv', index_col=0, parse_dates=True)
 
     vol = vol.set_index('time_stamp', drop=True).sort_index()
 
@@ -88,6 +77,6 @@ if __name__ == '__main__':
     out.loc[vol.index, 'ImbalanceVol_[MW]'] = vol.loc[:, 'imbalanceQuantityMAW']
 
     out = fill_nans(out)
-    check_output(out)
+    check_dataframe(out)
 
     out.to_csv('elexon/clean.csv')

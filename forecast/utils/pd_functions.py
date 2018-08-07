@@ -23,31 +23,22 @@ def check_duplicate_index(df, verbose=True):
     """
     dupes = df[df.index.duplicated()]
     num = dupes.shape[0]
+    print('{} index duplicates'.format(num))
 
-    if num == 0:
-        print('no duplicates found on the index')
-
-    if num != 0:
-        print('{} duplicates'.format(num))
-        if verbose == True:
-            print('duplicates are:')
-            print(dupes.head())
-        return dupes
+    if verbose == True:
+        print('duplicates are:')
+        print(dupes.head(3))
+    return dupes
 
 
 def check_duplicate_rows(df, verbose=True):
     duplicated_bools = df.duplicated()
     num = np.sum(duplicated_bools)
+    print('{} row duplicates'.format(num))
 
-    if num == 0:
-        print('no duplicate rows found')
-
-    if num != 0:
-        print('{} duplicate values'.format(num))
-        if verbose:
-            print('duplicate values are {}'.format(
-                df[duplicated_bools]))
-        return df[duplicated_bools]
+    if verbose:
+        df[duplicated_bools].head(3)
+    return df[duplicated_bools]
 
 
 def check_nans(df, verbose=True):
@@ -58,12 +49,11 @@ def check_nans(df, verbose=True):
     num = nans.shape[0]
 
     print('{} nans'.format(num))
-    if num != 0:
-        if verbose:
-            print('nan values are:')
-            print(nans.head())
+    if verbose:
+        print('nan values are:')
+        print(nans.head())
 
-        return nans
+    return nans
 
 
 def check_index_length(df, freq, verbose=True):
@@ -74,18 +64,21 @@ def check_index_length(df, freq, verbose=True):
                              end=df.index[-1],
                              freq=freq)
 
-    print('ideal index len {}'.format(ideal.shape[0]))
-    print('actual index len {}'.format(df.shape[0]))
+    ideal_len = ideal.shape[0]
+    actual_len = df.shape[0]
+    num_missing = ideal_len - actual_len
+    print('ideal index len {} actual {} missing {}'.format(
+        ideal_len, actual_len, num_missing))
 
     if ideal.shape[0] != df.shape[0]:
         missing = set(df.index).symmetric_difference(set(ideal))
         if verbose:
             print('missing are:')
             print(missing)
-        return missing
+        return missing, ideal
 
 
-def check_dataframe(df, freq, verbose=True):
+def check_dataframe(df, freq, verbose=False):
     """ wraps together all the checks """
     check_duplicate_index(df, verbose)
 
