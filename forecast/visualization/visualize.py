@@ -9,30 +9,10 @@ All functions have figsize as an optional kwarg
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .savefig import savefig
+
 
 plt.style.use('ggplot')
-
-
-def savefig(plot_func):
-    """ Decorator to save figure to .png """
-
-    def wrapper(*args, **kwargs):
-
-        fig = plot_func(*args, **kwargs)
-
-        try:
-            fig_name = kwargs.pop('fig_name')
-
-            if fig_name:
-                fig.savefig(fig_name)
-
-        except KeyError:
-            pass
-
-            return fig
-
-
-    return wrapper
 
 
 @savefig
@@ -72,6 +52,9 @@ def plot_time_series(
         figsize=[25, 10],
         same_plot=False,
         **kwargs):
+
+    if isinstance(figsize, tuple):
+        raise ValueError('fig size should be mutable (ie a list) - this is to allow dynamically sizing the fig')
 
     if isinstance(y, str):
         y = [y]
@@ -135,7 +118,9 @@ def plot_grouped(
 @savefig
 def plot_distribution(df, column):
 
-    fig, axes = plt.subplots(ncols=2, figsize=(12, 5))
+    fig, axes = plt.subplots(
+        nrows=2, figsize=(12, 5), sharex=True
+    )
 
     series = df.loc[:, column]
 

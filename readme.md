@@ -56,8 +56,15 @@ Tools for analyzing model performance
 
 ### visualization
 
-A toolkit for common plots
+A toolkit for common plots used for time series analysis
+
+Completed
 - time series plots
-- correlation in the lags
-- autocorrelations
+- grouping of variables by month/day/hour
+- distributions of data
+- autocorrelation & partial autocorrelation
+- lagged scatter matrix
+
+Todo
+- box plots
 - (https://github.com/sebaheg/GEFCom2014-wind)
