@@ -31,6 +31,10 @@ def check_duplicate_index(df, verbose=True):
     return df[df.index.duplicated(keep=False)]
 
 
+def drop_duplicate_index(df):
+    return df[~df.index.duplicated(keep='first')]
+
+
 def check_duplicate_rows(df, verbose=True):
     duplicated_bools = df.duplicated()
     num = np.sum(duplicated_bools)
@@ -87,3 +91,5 @@ def check_dataframe(df, freq, verbose=False):
     check_nans(df, verbose)
 
     check_index_length(df, freq, verbose)
+
+    #  TODO return a dict with all the returns from each check
