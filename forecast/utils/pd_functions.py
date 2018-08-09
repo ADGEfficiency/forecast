@@ -21,7 +21,7 @@ def check_duplicate_index(df, verbose=True):
     """
     Checks for duplicates in the index of a dataframe
     """
-    dupes = df[df.index.duplicated()]
+    dupes = df[df.index.duplicated(keep=False)]
     num = dupes.shape[0]
     print('{} index duplicates'.format(num))
 
