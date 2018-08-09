@@ -21,24 +21,24 @@ def check_duplicate_index(df, verbose=True):
     """
     Checks for duplicates in the index of a dataframe
     """
-    dupes = df[df.index.duplicated(keep=False)]
+    dupes = df[df.index.duplicated()]
     num = dupes.shape[0]
     print('{} index duplicates'.format(num))
 
     if verbose == True:
         print('duplicates are:')
         print(dupes.head(3))
-    return dupes
+    return df[df.index.duplicated(keep=False)]
 
 
 def check_duplicate_rows(df, verbose=True):
-    duplicated_bools = df.duplicated(keep=False)
+    duplicated_bools = df.duplicated()
     num = np.sum(duplicated_bools)
     print('{} row duplicates'.format(num))
 
     if verbose:
         df[duplicated_bools].head(3)
-    return df[duplicated_bools]
+    return df[df.duplicated(keep=False)]
 
 
 def check_nans(df, verbose=True):
