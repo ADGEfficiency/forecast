@@ -41,6 +41,9 @@ applied simultaneously to adjust the original data.
 
 Toolkit for engineering features using sklearn pipelines.  Fully developed test suite for each individual pipeline.
 
+Transformations
+- boxcox
+
 ### models
 
 A model library that wraps commonly used models
