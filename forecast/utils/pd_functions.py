@@ -32,7 +32,7 @@ def check_duplicate_index(df, verbose=True):
 
 
 def check_duplicate_rows(df, verbose=True):
-    duplicated_bools = df.duplicated()
+    duplicated_bools = df.duplicated(keep=False)
     num = np.sum(duplicated_bools)
     print('{} row duplicates'.format(num))
 
