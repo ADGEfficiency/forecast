@@ -82,6 +82,17 @@ def check_index_length(df, freq, verbose=True):
         return missing, ideal
 
 
+def make_df_fill_dt_index(df, freq, method='ffill'):
+
+    missing, ideal = check_index_length(df, freq)
+
+    ideal_idx_df = pd.DataFrame(index=ideal)
+
+    df = pd.concat([ideal_idx_df, df], axis=1)
+
+    return df.fillna(method=method)
+
+
 def check_dataframe(df, freq, verbose=False):
     """ wraps together all the checks """
     check_duplicate_index(df, verbose)
