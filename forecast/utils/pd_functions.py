@@ -28,6 +28,7 @@ def check_duplicate_index(df, verbose=True):
     if verbose == True:
         print('duplicates are:')
         print(dupes.head(3))
+
     return df[df.index.duplicated(keep=False)]
 
 
@@ -42,6 +43,7 @@ def check_duplicate_rows(df, verbose=True):
 
     if verbose:
         df[duplicated_bools].head(3)
+
     return df[df.duplicated(keep=False)]
 
 
@@ -76,9 +78,11 @@ def check_index_length(df, freq, verbose=True):
 
     if ideal.shape[0] != df.shape[0]:
         missing = set(df.index).symmetric_difference(set(ideal))
+
         if verbose:
             print('missing are:')
             print(missing)
+
         return missing, ideal
 
 
@@ -95,12 +99,18 @@ def make_df_fill_dt_index(df, freq, method='ffill'):
 
 def check_dataframe(df, freq, verbose=False):
     """ wraps together all the checks """
-    check_duplicate_index(df, verbose)
+    duplicate_index = check_duplicate_index(df, verbose)
 
-    check_duplicate_rows(df, verbose)
+    duplicate_rows = check_duplicate_rows(df, verbose)
 
-    check_nans(df, verbose)
+    nans = check_nans(df, verbose)
 
-    check_index_length(df, freq, verbose)
+    missing_index, ideal_index = check_index_length(df, freq, verbose)
 
-    #  TODO return a dict with all the returns from each check
+    return {
+        'duplicate_index': duplicate_index,
+        'duplicate_rows': duplicate_rows,
+        'nans': nans,
+        'missing_index': missing_index,
+        'ideal_index': ideal_index
+    }

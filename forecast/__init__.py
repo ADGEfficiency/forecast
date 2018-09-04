@@ -1,3 +1,3 @@
-from .utils import *
+from forecast.utils import *
 
-from .models.register import make_model
+from forecast.models.register import make_model

@@ -71,3 +71,16 @@ Completed
 Todo
 - box plots
 - (https://github.com/sebaheg/GEFCom2014-wind)
+- fig 8 from 2017_Ullah_energy_cons_markov_models.pdf (box plot for every hour of the day)
+- https://otexts.org/fpp2/ - plots and methods from Hyndman
+- mixed density networks - http://blog.otoro.net/2015/11/24/mixture-density-networks-with-tensorflow/
+- http://euanmearns.com/el-hierro-portal/ - a data source
+- http://www.netzdaten-berlin.de/#
+
+why is seasonality a problem:
+* If the dependent variable has seasonality, then the variance of the total will be larger on days with greater business activity (this is a consequence of the central limit theorem)
+* Transformations such as logging or seasonal adjustment can be used to deal with this problem
+what is central limit theorem
+* central limit theorem - sum or avg of a large number of independent random variables (whatever their distributions) reaches a normal distribution
+autocorrelation
+* If autocorrelation is a problem, probably include lagged variables.  Stationarize dependent or dependent by differencing, or add lags of the dependent/independent variable regression, or include autoregressive error correction (which is better, differencing or including the vars?)
