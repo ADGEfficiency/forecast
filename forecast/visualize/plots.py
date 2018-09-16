@@ -74,7 +74,7 @@ def plot_time_series(
 @savefig
 def plot_grouped(
         df, 
-        column, 
+        y, 
         group_type='year_and_month'):
 
     if group_type == 'year_and_month':
@@ -90,17 +90,17 @@ def plot_grouped(
         raise ValueError('group_type of {} not supported'.format(group_type))
 
     groups = df.groupby(group_idx).agg(
-        {column: [np.mean, np.std, np.median, np.min, np.max]})
+        {y: [np.mean, np.std, np.median, np.min, np.max]})
 
     fig, axes = plt.subplots(nrows=3, figsize=(15, 10))
 
-    groups[column]['mean'].plot(ax=axes[0], kind='line')
-    groups[column]['median'].plot(ax=axes[0], kind='line')
-    groups[column]['std'].plot(ax=axes[1], kind='line')
-    groups[column]['amin'].plot(ax=axes[2], kind='line')
-    groups[column]['amax'].plot(ax=axes[2], kind='line')
+    groups[y]['mean'].plot(ax=axes[0], kind='line')
+    groups[y]['median'].plot(ax=axes[0], kind='line')
+    groups[y]['std'].plot(ax=axes[1], kind='line')
+    groups[y]['amin'].plot(ax=axes[2], kind='line')
+    groups[y]['amax'].plot(ax=axes[2], kind='line')
 
-    axes[0].set_title('{} grouped by {}'.format(column, group_type))
+    axes[0].set_title('{} grouped by {}'.format(y, group_type))
 
     for ax in axes:
         ax.legend()
@@ -109,13 +109,13 @@ def plot_grouped(
 
 
 @savefig
-def plot_distribution(df, column):
+def plot_distribution(df, y):
 
     fig, axes = plt.subplots(
         nrows=2, figsize=(12, 5), sharex=True
     )
 
-    series = df.loc[:, column]
+    series = df.loc[:, y]
 
     series.plot(ax=axes[0], kind='hist', bins=1000)
     series.plot(ax=axes[1], kind='kde')
@@ -124,6 +124,6 @@ def plot_distribution(df, column):
 
     for ax in axes:
         ax.set_xlim([-xlim, xlim])
-        ax.set_xlabel(column)
+        ax.set_xlabel(y)
 
     return fig
