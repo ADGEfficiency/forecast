@@ -1,11 +1,12 @@
-""" Various helper functions for pandas """
+""" various helper functions for pandas """
 import numpy as np
 import pandas as pd
 
 
 def make_dt_index(df, timestamp_col, dt_offset=None):
-    df.index = pd.to_datetime(df.loc[:, timestamp_col],
-                              format='%Y-%m-%dT%H:%M:%S.%f')
+    df.index = pd.to_datetime(
+        df.loc[:, timestamp_col], format='%Y-%m-%dT%H:%M:%S.%f'
+    )
 
     if dt_offset:
         df.index = df.index + dt_offset
@@ -18,9 +19,7 @@ def make_dt_index(df, timestamp_col, dt_offset=None):
 
 
 def check_duplicate_index(df, verbose=True):
-    """
-    Checks for duplicates in the index of a dataframe
-    """
+    """ checks for duplicates in the index of a dataframe """
     dupes = df[df.index.duplicated()]
     num = dupes.shape[0]
     print('{} index duplicates'.format(num))
@@ -48,9 +47,7 @@ def check_duplicate_rows(df, verbose=True):
 
 
 def check_nans(df, verbose=True):
-    """
-    Checks for NANs in a dataframe
-    """
+    """ checks for NANs in a dataframe """
     nans = df[df.isnull().any(axis=1)]
     num = nans.shape[0]
 
@@ -63,9 +60,7 @@ def check_nans(df, verbose=True):
 
 
 def check_index_length(df, freq, verbose=True):
-    """
-    Compare a DatetimeIndex with the expected length
-    """
+    """ compare a DatetimeIndex with the expected length """
     ideal = pd.DatetimeIndex(start=df.index[0],
                              end=df.index[-1],
                              freq=freq)
@@ -84,6 +79,9 @@ def check_index_length(df, freq, verbose=True):
             print(missing)
 
         return missing, ideal
+
+    else:
+        return None, df.index
 
 
 def make_df_fill_dt_index(df, freq, method='ffill'):
