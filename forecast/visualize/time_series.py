@@ -33,5 +33,12 @@ def plot_time_series(
         a[idx].set_title(y_label)
         data.plot(y=y_label, ax=a[idx], **kwargs)
 
+    f.suptitle(
+        '{} to {}'.format(data.index[0], data.index[-1]),
+         horizontalalignment='center',
+         verticalalignment='top',
+         size=16
+    )
+
     return f
 
