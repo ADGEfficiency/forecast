@@ -16,7 +16,9 @@ def dataset_describe(d):
 
 
 if __name__ == '__main__':
-    raw_data = pd.read_csv('../data_gathering/elexon/clean.csv',
+
+    dataset = 'elexon'
+    raw_data = pd.read_csv('../../data/{}/clean.csv'.format(dataset),
                            index_col=0,
                            parse_dates=True)
 
@@ -27,26 +29,32 @@ if __name__ == '__main__':
     LAGS = [1, 2, 3, 4, 10]
 
     #  TODO HH cyclical features
-    make_target = make_pipeline(p.ColumnSelector('ImbalancePrice_excess_balance_[£/MWh]'),
-                                p.OffsetGenerator('horizion', HORIZIONS),
-                                p.AlignPandas(LAGS, HORIZIONS),
-                                p.AsMatrix(),
-                                StandardScaler())
+    make_target = make_pipeline(
+        p.ColumnSelector('ImbalancePrice_excess_balance_[£/MWh]'),
+        p.OffsetGenerator('horizion', HORIZIONS),
+        p.AlignPandas(LAGS, HORIZIONS),
+        p.AsMatrix(),
+        StandardScaler()
+    )
 
     y_train = make_target.fit_transform(train)
     y_test = make_target.transform(test)
 
-    make_features = make_pipeline(p.OffsetGenerator('lag', LAGS),
-                                  p.AlignPandas(LAGS, HORIZIONS),
-                                  p.AsMatrix(),
-                                  StandardScaler())
+    make_features = make_pipeline(
+        p.OffsetGenerator('lag', LAGS),
+        p.AlignPandas(LAGS, HORIZIONS),
+        p.AsMatrix(),
+        StandardScaler()
+    )
 
     x_train = make_features.fit_transform(train)
     x_test = make_features.transform(test)
 
-    dataset = {'x_train': x_train,
-               'y_train': y_train,
-               'x_test': x_test,
-               'y_test': y_test}
+    dataset = {
+        'x_train': x_train,
+        'y_train': y_train,
+        'x_test': x_test,
+        'y_test': y_test}
+    }
 
     dataset_describe(dataset)

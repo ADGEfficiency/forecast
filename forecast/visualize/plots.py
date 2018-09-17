@@ -1,9 +1,3 @@
-"""
-Generic matplotlib functions
-All functions pass **kwargs into the .plot call
-All functions have figsize as an optional kwarg
-"""
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -44,34 +38,6 @@ def plot_line(
 
 
 @savefig
-def plot_time_series(
-        data,
-        y,
-        figsize=(25, 10),
-        same_plot=False,
-        **kwargs):
-
-    if isinstance(y, str):
-        y = [y]
-
-    if same_plot:
-        nrows = 1
-
-    else:
-        nrows = len(y)
-
-    f, a = plt.subplots(figsize=figsize, nrows=nrows, sharex=True)
-    a = np.array(a).flatten()
-
-    for idx, y_label in enumerate(y):
-        if same_plot:
-            idx = 0
-        a[idx].set_title(y_label)
-        data.plot(y=y_label, ax=a[idx], **kwargs)
-
-    return f
-
-@savefig
 def plot_grouped(
         df, 
         y, 
@@ -104,6 +70,27 @@ def plot_grouped(
 
     for ax in axes:
         ax.legend()
+
+    return fig
+
+
+@savefig
+def plot_distribution(df, y):
+
+    fig, axes = plt.subplots(
+        nrows=2, figsize=(12, 5), sharex=True
+    )
+
+    series = df.loc[:, y]
+
+    series.plot(ax=axes[0], kind='hist', bins=1000)
+    series.plot(ax=axes[1], kind='kde')
+
+    xlim = series.mean() + series.std() * 3
+
+    for ax in axes:
+        ax.set_xlim([-xlim, xlim])
+        ax.set_xlabel(y)
 
     return fig
 
