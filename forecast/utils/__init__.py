@@ -1,2 +1,2 @@
-from .pd_functions import *
+from .dataframe_quality import *
 from .utils import *
