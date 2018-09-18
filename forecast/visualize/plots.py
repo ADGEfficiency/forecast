@@ -25,7 +25,8 @@ def plot_line(
         y,
         x=None,
         figsize=(10, 10),
-        **kwargs):
+        **kwargs
+):
 
     f, a = plt.subplots(figsize=figsize)
 
@@ -39,9 +40,10 @@ def plot_line(
 
 @savefig
 def plot_grouped(
-        df, 
-        y, 
-        group_type='year_and_month'):
+        df,
+        y,
+        group_type='year_and_month'
+):
 
     if group_type == 'year_and_month':
         group_idx = [df.index.year, df.index.month]
@@ -70,27 +72,6 @@ def plot_grouped(
 
     for ax in axes:
         ax.legend()
-
-    return fig
-
-
-@savefig
-def plot_distribution(df, y):
-
-    fig, axes = plt.subplots(
-        nrows=2, figsize=(12, 5), sharex=True
-    )
-
-    series = df.loc[:, y]
-
-    series.plot(ax=axes[0], kind='hist', bins=1000)
-    series.plot(ax=axes[1], kind='kde')
-
-    xlim = series.mean() + series.std() * 3
-
-    for ax in axes:
-        ax.set_xlim([-xlim, xlim])
-        ax.set_xlabel(y)
 
     return fig
 
