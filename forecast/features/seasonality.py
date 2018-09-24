@@ -1,4 +1,4 @@
-""" transformations of data - mostly for deseasonalizing """
+""" pipelines for dealing with seasonality """
 
 import numpy as np
 import pandas as pd
@@ -6,8 +6,6 @@ from scipy.stats import boxcox
 
 from sklearn.base import BaseEstimator, TransformerMixin
 
-
-test = np.random.uniform(size=10)
 
 class BoxCox(BaseEstimator, TransformerMixin):
     """

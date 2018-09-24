@@ -54,7 +54,7 @@ if __name__ == '__main__':
         'x_train': x_train,
         'y_train': y_train,
         'x_test': x_test,
-        'y_test': y_test}
+        'y_test': y_test
     }
 
     dataset_describe(dataset)

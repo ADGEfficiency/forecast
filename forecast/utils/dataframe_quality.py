@@ -1,4 +1,5 @@
-""" various helper functions for pandas """
+""" helper functions to check dataframe quality """
+
 import numpy as np
 import pandas as pd
 

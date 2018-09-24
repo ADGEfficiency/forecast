@@ -6,6 +6,8 @@ This project is in the initial stages of development.  I'm currently working on 
 
 The aim of this repo is to provide a set of tools and examples of time series forecasting for energy problems.
 
+Reusable tools exist in `forecast/forecast` - project specific code exists in `projects/project_name`.  The structure of a project folder is flexible.
+
 ### data
 
 Tools for scraping publically available energy datasets and tools for cleaning & processing data for use in training models.
