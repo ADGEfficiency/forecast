@@ -77,7 +77,7 @@ def plot_grouped(
 
 
 @savefig
-def plot_distribution(df, y):
+def plot_distribution(df, y, set_xlim=True):
 
     fig, axes = plt.subplots(
         nrows=2, figsize=(12, 5), sharex=True
@@ -91,7 +91,8 @@ def plot_distribution(df, y):
     xlim = series.mean() + series.std() * 3
 
     for ax in axes:
-        ax.set_xlim([-xlim, xlim])
         ax.set_xlabel(y)
+        if set_xlim:
+            ax.set_xlim([-xlim, xlim])
 
     return fig
