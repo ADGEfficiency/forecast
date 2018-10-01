@@ -24,14 +24,26 @@ def plot_time_series(
     else:
         nrows = len(y)
 
-    f, a = plt.subplots(figsize=figsize, nrows=nrows, sharex=True)
-    a = np.array(a).flatten()
+    f, axes = plt.subplots(figsize=figsize, nrows=nrows, sharex=True)
+    axes = np.array(axes).flatten()
 
     for idx, y_label in enumerate(y):
+
         if same_plot:
             idx = 0
-        a[idx].set_title(y_label)
-        data.plot(y=y_label, ax=a[idx], **kwargs)
+
+        axe = axes[idx]
+
+        #  must be a better way - TODO
+        if 'ymin' in kwargs:
+            axe.set_ylim(ymin=kwargs.pop('ymin'))
+
+        if 'ymax' in kwargs:
+            axe.set_ylim(ymax=kwargs.pop('ymax'))
+
+        axe.set_title(y_label)
+        data.plot(y=y_label, ax=axe, **kwargs)
+
 
     f.suptitle(
         '{} to {}'.format(data.index[0], data.index[-1]),
@@ -39,6 +51,7 @@ def plot_time_series(
          verticalalignment='top',
          size=16
     )
+
 
     return f
 
