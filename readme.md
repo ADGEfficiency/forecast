@@ -55,6 +55,11 @@ A model library that wraps commonly used models
 - feedforward nn
 - convolutional nn
 - lstm nn
+- [1D convolution](https://machinelearningmastery.com/how-to-develop-rnn-models-for-human-activity-recognition-time-series-classification/)
+
+- mixed density networks
+
+Wind power prediction using mixture density recurrent neural networks - [paper](https://www.researchgate.net/publication/268433998_Wind_power_prediction_using_mixture_density_recurrent_neural_networks)
 
 Tools for analyzing model performance
 - error metrics such as MAPE, MASE
@@ -78,6 +83,8 @@ Todo
 - mixed density networks - http://blog.otoro.net/2015/11/24/mixture-density-networks-with-tensorflow/
 - http://euanmearns.com/el-hierro-portal/ - a data source
 - http://www.netzdaten-berlin.de/#
+- quantile regression
+- MAE, Kolmogorov-Smirnov (K-S), pinball loss, continuous rank probability score (CRPS)
 
 why is seasonality a problem:
 * If the dependent variable has seasonality, then the variance of the total will be larger on days with greater business activity (this is a consequence of the central limit theorem)
