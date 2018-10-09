@@ -52,7 +52,7 @@ def check_nans(df, verbose=True):
     nans = df[df.isnull().any(axis=1)]
     num = nans.shape[0]
 
-    print('{} nans'.format(num))
+    print('{} nan rows'.format(num))
     if verbose:
         print('nan values are:')
         print(nans.head())
