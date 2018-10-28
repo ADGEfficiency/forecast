@@ -3,6 +3,7 @@ Cleans raw ELEXON data that was scraped using scrape_data.py
 
 Each report requires a slightly different approach for cleaning
 """
+import numpy as np
 import pandas as pd
 
 from forecast import check_dataframe
@@ -42,7 +43,7 @@ def fill_nans(df):
 
 
 def clean_price_data():
-    price = pd.read_csv('../../../data/raw/elexon/B1770.csv', parse_dates=True)
+    price = pd.read_csv('./data/raw/B1770.csv', parse_dates=True)
 
     price = price.pivot_table(values='imbalancePriceAmountGBP',
                               index='time_stamp',
@@ -54,7 +55,7 @@ def clean_price_data():
 
 
 def clean_vol_data():
-    vol = pd.read_csv('../../../data/raw/elexon/B1780.csv', index_col=0, parse_dates=True)
+    vol = pd.read_csv('./data/raw/B1780.csv', index_col=0, parse_dates=True)
 
     vol = vol.set_index('time_stamp', drop=True).sort_index()
 
@@ -76,7 +77,13 @@ if __name__ == '__main__':
     out.loc[price.index, 'ImbalancePrice_insufficient_balance_[£/MWh]'] = price.loc[:, 'Insufficient balance']
     out.loc[vol.index, 'ImbalanceVol_[MW]'] = vol.loc[:, 'imbalanceQuantityMAW']
 
-    out = fill_nans(out)
-    check_dataframe(out)
+    out['Imbalance_price [£/MWh]'] = np.where(
+        out['ImbalanceVol_[MW]'] > 0,
+        out['ImbalancePrice_excess_balance_[£/MWh]'],
+        out['ImbalancePrice_insufficient_balance_[£/MWh]']
+    )
 
-    out.to_csv('elexon/clean.csv')
+    out = fill_nans(out)
+    check_dataframe(out, freq='30min')
+
+    out.to_csv('data/clean.csv')

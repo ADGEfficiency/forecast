@@ -52,6 +52,4 @@ def plot_time_series(
          size=16
     )
 
-
     return f
-
