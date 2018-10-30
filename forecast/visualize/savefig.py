@@ -7,7 +7,7 @@ def savefig(plot_func):
         try:
             fig_name = kwargs.pop('fig_name')
         except KeyError:
-            pass
+            fig_name = None
 
         fig = plot_func(*args, **kwargs)
 

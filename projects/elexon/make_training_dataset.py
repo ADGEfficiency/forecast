@@ -1,36 +1,25 @@
 import numpy as np
 import pandas as pd
 
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import make_pipeline, make_union
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-import pipelines as p
-
-
-def dataset_describe(d):
-    for k, v in d.items():
-        print('{} {}'.format(k, v.shape))
-        print('means {}'.format(np.mean(v, axis=0)))
-        print('std {}'.format(np.std(v, axis=0)))
+import forecast.pipelines as p
 
 
 if __name__ == '__main__':
 
-    dataset = 'elexon'
-    raw_data = pd.read_csv('../../data/{}/clean.csv'.format(dataset),
-                           index_col=0,
-                           parse_dates=True)
+    clean = pd.read_csv('./data/clean.csv', index_col=0, parse_dates=True)
 
-    train, test = train_test_split(raw_data, test_size=0.3, shuffle=False)
+    train, test = train_test_split(clean, test_size=0.3, shuffle=False)
     train_index, test_index = train.index, test.index
 
-    HORIZIONS = [0, 1]
-    LAGS = [1, 2, 3, 4, 10]
+    HORIZIONS = [0, 1, 2, 3]
+    LAGS = [1, 2, 3, 24, 48]
 
-    #  TODO HH cyclical features
     make_target = make_pipeline(
-        p.ColumnSelector('ImbalancePrice_excess_balance_[£/MWh]'),
+        p.ColumnSelector('Imbalance_price [£/MWh]'),
         p.OffsetGenerator('horizion', HORIZIONS),
         p.AlignPandas(LAGS, HORIZIONS),
         p.AsMatrix(),
@@ -40,15 +29,56 @@ if __name__ == '__main__':
     y_train = make_target.fit_transform(train)
     y_test = make_target.transform(test)
 
-    make_features = make_pipeline(
-        p.OffsetGenerator('lag', LAGS),
-        p.AlignPandas(LAGS, HORIZIONS),
-        p.AsMatrix(),
-        StandardScaler()
-    )
+    make_features = make_union(
+        make_pipeline(
+            p.ColumnSelector('Imbalance_price [£/MWh]'),
+            p.OffsetGenerator('lag', LAGS),
+            p.AlignPandas(LAGS, HORIZIONS),
+            p.AsMatrix(),
+            StandardScaler()),
+        make_pipeline(
+            p.ColumnSelector('ImbalanceVol_[MW]'),
+            p.OffsetGenerator('lag', LAGS),
+            p.AlignPandas(LAGS, HORIZIONS),
+            p.AsMatrix(),
+            StandardScaler()),
+         make_pipeline(
+            p.HalfHourlyCyclicalFeatures(),
+            p.AlignPandas(LAGS, HORIZIONS),
+            p.AsMatrix()),
+         )
 
     x_train = make_features.fit_transform(train)
     x_test = make_features.transform(test)
+
+    feature_cols = ['price_lag_{}'.format(lag) for lag in LAGS]
+    feature_cols += ['vol_lag_{}'.format(lag) for lag in LAGS]
+    feature_cols += ['sin_h', 'cos_h']
+
+    train_index = p.Align(LAGS, HORIZIONS).transform(train_index)
+    test_index = p.Align(LAGS, HORIZIONS).transform(test_index)
+
+    x_train = pd.DataFrame(
+        x_train, index=train_index,
+        columns=feature_cols
+    )
+
+    x_test = pd.DataFrame(
+        x_test, index=test_index,
+        columns=feature_cols
+    )
+
+    target_cols = ['price_horizion_{}'.format(hor) for hor in HORIZIONS]
+
+    y_train = pd.DataFrame(
+        y_train, index=train_index,
+        columns=target_cols
+    )
+
+    y_test = pd.DataFrame(
+        y_test, index=test_index,
+        columns=target_cols
+    )
 
     dataset = {
         'x_train': x_train,
@@ -57,4 +87,6 @@ if __name__ == '__main__':
         'y_test': y_test
     }
 
-    dataset_describe(dataset)
+    for name, df in dataset.items():
+        print('{} shape {}'.format(name, df.shape))
+        df.to_csv('./data/{}.csv'.format(name))

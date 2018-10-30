@@ -27,6 +27,23 @@ class AlignPandas(BaseEstimator, TransformerMixin):
         else:
             raise ValueError('The AlignPandas pipeline uses pandas objects')
 
+
+class Align(BaseEstimator, TransformerMixin):
+
+    def __init__(self, LAGS, HORIZIONS):
+        self.max_lag = max(LAGS)
+        self.max_horizion = max(HORIZIONS)
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x):
+        #  catching the edge case with a hack!
+        if self.max_horizion == 0:
+            self.max_horizion = 1
+
+        return x[self.max_lag:-self.max_horizion]
+
 class HourlyCyclicalFeatures(BaseEstimator, TransformerMixin):
     """
     args

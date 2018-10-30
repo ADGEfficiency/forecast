@@ -9,8 +9,8 @@ plt.style.use('ggplot')
 
 @savefig
 def plot_grouped(
-        df, 
-        y, 
+        df,
+        y,
         group_type='year_and_month'):
 
     if group_type == 'year_and_month':

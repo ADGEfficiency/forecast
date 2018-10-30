@@ -16,7 +16,7 @@ class AsMatrix(BaseEstimator, TransformerMixin):
 
     def transform(self, x):
         rows = x.shape[0]
-        return x.as_matrix().reshape(rows, -1)
+        return x.values.reshape(rows, -1)
 
 
 class BinaryLabels(BaseEstimator, TransformerMixin):
